@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# ChatGPT Summarizer Chrome Extension
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Acknowledgement: This project followed the [tutorial](https://blog.logrocket.com/creating-chrome-extension-react-typescript/) to set up development environment. 
 
 ## Available Scripts
 
