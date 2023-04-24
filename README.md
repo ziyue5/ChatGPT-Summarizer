@@ -1,6 +1,6 @@
 # ChatGPT Summarizer Chrome Extension
 
-Acknowledgement: This project followed the [tutorial](https://blog.logrocket.com/creating-chrome-extension-react-typescript/) to set up development environment. 
+Acknowledgement: This project followed this [tutorial](https://blog.logrocket.com/creating-chrome-extension-react-typescript/) to set up development environment. 
 
 ## Available Scripts
 
