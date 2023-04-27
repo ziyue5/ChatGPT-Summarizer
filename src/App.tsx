@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './App.css';
 import { Box, Button, Divider, Typography } from '@mui/material';
+import { DOMMessage, DOMMessageResponse } from './types';
 
 function App() {
   const [summary, setSummary] = useState<any>(null);
-  const [links, setLinks] = useState(null);
+  const [links, setLinks] = useState<any>(null);
 
   const handleSummarize = () => {
     fetch("https://jsonplaceholder.typicode.com/posts/1", {
@@ -21,6 +22,30 @@ function App() {
       .then((response) => response.json())
       .then((response) => setLinks(response.body));
   }
+
+  /*
+    Adapted code from
+    Source: Creating a Chrome extension with React and TypeScript
+    Author: Juan Cruz Martinez
+    Website: LogRocket Blog
+    Date: August 12, 2021
+    URL: https://blog.logrocket.com/creating-chrome-extension-react-typescript/
+  */
+
+  React.useEffect(() => {
+    chrome.tabs && chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, tabs => {
+      chrome.tabs.sendMessage(
+        tabs[0].id || 0,
+        { type: 'GET_DOM' } as DOMMessage,
+        (response: DOMMessageResponse) => {
+          setSummary(response.text);
+          setLinks(response.text);
+        });
+    });
+  }, []);
 
   return (
     <Box display={"flex"} flexDirection={"column"}>
