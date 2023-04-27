@@ -1,5 +1,5 @@
 /*
-    Adapted code from
+    Code from
     Source: Creating a Chrome extension with React and TypeScript
     Author: Juan Cruz Martinez
     Website: LogRocket Blog
