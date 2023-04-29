@@ -22,7 +22,7 @@ const messagesFromReactAppListener = (
         text += element.innerText + '\n';
    }
 
-   const returnedText = text.split(' ').slice(200, 2200).join(' ');
+   const returnedText = text.split(' ').slice(200, 1400).join(' ');
  
    const response: DOMMessageResponse = {
        text: returnedText

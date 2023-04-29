@@ -2,25 +2,55 @@ import React, { useState } from 'react';
 import './App.css';
 import { Box, Button, Divider, Typography } from '@mui/material';
 import { DOMMessage, DOMMessageResponse } from './types';
+import { Configuration, OpenAIApi } from 'openai';
 
 function App() {
+  const [source, setSource] = useState<any>(null);
   const [summary, setSummary] = useState<any>(null);
   const [links, setLinks] = useState<any>(null);
 
   const handleSummarize = () => {
-    fetch("https://jsonplaceholder.typicode.com/posts/1", {
-      method: "GET"
-    })
-      .then((response) => response.json())
-      .then((response) => setSummary(response.body));
+    const configuration = new Configuration({
+      apiKey: process.env.REACT_APP_OPENAI_API_TOKEN,
+    });
+
+    delete configuration.baseOptions.headers['User-Agent'];
+
+    const openai = new OpenAIApi(configuration);
+
+    const prompt = "Summarize it: " + source;
+
+    openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 2048
+    }).then((response) => {
+      console.log(prompt);
+      console.log(response);
+      setSummary(response.data.choices[0].message?.content);
+    });
   }
 
   const getLinks = () => {
-    fetch("https://jsonplaceholder.typicode.com/posts/1", {
-      method: "GET"
-    })
-      .then((response) => response.json())
-      .then((response) => setLinks(response.body));
+    const configuration = new Configuration({
+      apiKey: process.env.REACT_APP_OPENAI_API_TOKEN,
+    });
+
+    delete configuration.baseOptions.headers['User-Agent'];
+
+    const openai = new OpenAIApi(configuration);
+
+    const prompt = "Give me 5 relevant websites and their links based on: " + summary ;
+
+    openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: 2048
+    }).then((response) => {
+      console.log(prompt);
+      console.log(response);
+      setLinks(response.data.choices[0].message?.content);
+    });
   }
 
   /*
@@ -41,8 +71,7 @@ function App() {
         tabs[0].id || 0,
         { type: 'GET_DOM' } as DOMMessage,
         (response: DOMMessageResponse) => {
-          setSummary(response.text);
-          setLinks(response.text);
+          setSource(response.text);
         });
     });
   }, []);
@@ -63,9 +92,9 @@ function App() {
           <Divider/>
         </Box>
         }
-        <Button disableRipple variant="contained" sx={{ width: "260px", mt: 2 }} onClick={getLinks}>
+        {summary && <Button disableRipple variant="contained" sx={{ width: "260px", mt: 2 }} onClick={getLinks}>
           Show relevant sources
-        </Button>
+        </Button>}
         {links && 
         <Box sx={{ m: 2 }}>
           <Divider/>
